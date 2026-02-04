@@ -7,7 +7,11 @@ const userSchema = mongoose.Schema({
         type: String
     },
     emailId:{
-        type: String
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     password:{
         type: String
@@ -16,8 +20,15 @@ const userSchema = mongoose.Schema({
         type: String
     },
     gender:{
-        type: String
+        type: String,
+        validate(value){ // Will run on creating new document only, yu need to enable it to make it run on update too - runValidators()
+            if(!["male", "female", "others"]){
+                throw new Error("Gender data is not valid")
+            }
+        }
     }
+},{
+    timestamps: true
 })
 
 const User = mongoose.model("User", userSchema)
